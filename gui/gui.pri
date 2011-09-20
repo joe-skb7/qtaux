@@ -1,7 +1,7 @@
 QT *= core gui
 
-INCLUDEPATH += $$PWD/..
-DEPENDPATH += $$PWD/..
+INCLUDEPATH += $$PWD/../..
+DEPENDPATH += $$PWD/../..
 
 HEADERS += \
     $$PWD/closedialog.h \

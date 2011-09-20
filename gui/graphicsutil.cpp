@@ -39,7 +39,7 @@
 #include <QtGui/QApplication>
 #include <QtGui/QDesktopWidget>
 #include <QtGui/QWidget>
-#include "gui/graphicsutil.h"
+#include "qaux/gui/graphicsutil.h"
 
 /*!
     \class GraphicsUtil

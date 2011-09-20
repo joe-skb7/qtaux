@@ -36,9 +36,9 @@
 
 #include <QtGui/QProxyStyle>
 #include "ui_closedialog.h"
-#include "gui/closedialog.h"
+#include "qaux/gui/closedialog.h"
 #ifdef Q_OS_WIN32
-#include "gui/graphicsutil.h"
+#include "qaux/gui/graphicsutil.h"
 #endif
 
 namespace {

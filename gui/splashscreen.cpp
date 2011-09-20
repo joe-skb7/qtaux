@@ -36,7 +36,7 @@
 
 #include <QtCore/QDebug>
 #include <QtGui/QPainter>
-#include "gui/splashscreen.h"
+#include "qaux/gui/splashscreen.h"
 
 /*!
     \class SplashScreen
