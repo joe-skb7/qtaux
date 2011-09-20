@@ -118,10 +118,10 @@ void SplashScreen::showMessage(const QString &message, int alignment, const QCol
 */
 void SplashScreen::finish(QWidget *win)
 {
-    if (mainWin) {
+    if (win) {
 #if defined(Q_WS_X11)
-        extern void qt_x11_wait_for_window_manager(QWidget *mainWin);
-        qt_x11_wait_for_window_manager(mainWin);
+        extern void qt_x11_wait_for_window_manager(QWidget *win);
+        qt_x11_wait_for_window_manager(win);
 #endif
     }
     close();
