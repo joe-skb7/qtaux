@@ -6,7 +6,8 @@ Common
 - In README make link to qtsolutions and to scratches
 - Make it possible to build static/dynamic library
   (separately for gui and sys)
-- Think about some prefix for classes instead of namespaces.
+- Think about some prefix for classes instead of namespaces
+- Add doxyfile
 
 
 Gui
