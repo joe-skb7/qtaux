@@ -1,5 +1,8 @@
 QT *= core gui
 
+INCLUDEPATH += $$PWD/..
+DEPENDPATH += $$PWD/..
+
 HEADERS += \
     $$PWD/closedialog.h \
     $$PWD/graphicsutil.h \
