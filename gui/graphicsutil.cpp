@@ -43,11 +43,11 @@
 
 /*!
     \class GraphicsUtil
-    \brief Содержит функции работы с графическими элементами.
+    \brief Contains functions for graphical isues.
 */
 
 /*!
-    Устанавливает qss-стиль из файла \a fileName для виджета \a widget.
+    Sets up qss style for widget \a widget from file \a fileName.
 */
 bool GraphicsUtil::setStyleSheet(const QString &fileName, QWidget *widget)
 {
@@ -63,7 +63,7 @@ bool GraphicsUtil::setStyleSheet(const QString &fileName, QWidget *widget)
 }
 
 /*!
-    Устанавливает qss-стиль из файла \a fileName для приложения \a app.
+    Sets up qss style for application \a app from file \a fileName .
 */
 bool GraphicsUtil::setStyleSheet(const QString &fileName, QApplication *app)
 {
@@ -79,11 +79,9 @@ bool GraphicsUtil::setStyleSheet(const QString &fileName, QApplication *app)
 }
 
 /*!
-    Расположить окно по центру экрана.
-    \note Использование этой функции рекомендуется только на Windows, т.к. в остальных ОС
-    оконный менеджер сам знает, как лучше расположить окна и принудительная установка позиции
-    окна является нежелательным поведением.
-    \note http://www.wiki.crossplatform.ru/index.php/Как_расположить_окно_по_центру_экрана%3F
+    Places window \a widget onto the screen center.
+    \note Usage of this function recommended only for Windows, since the DE in other OS's
+    able to arrange windows, so forced setting of window position is wrong behavior.
 */
 void GraphicsUtil::moveWindowToCenter(QWidget *widget)
 {

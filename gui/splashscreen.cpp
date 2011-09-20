@@ -40,8 +40,8 @@
 
 /*!
     \class SplashScreen
-    \brief Сплеш-скрин с возможностью установки прозрачных изображений.
-    \note Это workaround бага с прозрачностью сплеш-скрина; подробней читай тут:
+    \brief Splash screen with opacity support.
+    \note This class is workaround for issue with QSplashScreen opacity; for details see:
     http://developer.qt.nokia.com/forums/viewthread/3155 .
 
     Example:
@@ -78,6 +78,9 @@
     \sa QSplashScreen
 */
 
+/*!
+    Constructs splash screent with image \a pixmap.
+*/
 SplashScreen::SplashScreen(const QPixmap &pixmap)
     : QFrame(0, Qt::SplashScreen | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint)
 {
@@ -92,18 +95,32 @@ SplashScreen::SplashScreen(const QPixmap &pixmap)
     setFixedSize(m_pixmap.size());
 }
 
+/*!
+    Clean message.
+*/
 void SplashScreen::clearMessage()
 {
     m_message.clear();
     repaint();
 }
 
+/*!
+    Sets up message rectangle sizes to \a rect.
+    \param alignment Message text alignment.
+    \sa showMessage()
+*/
 void SplashScreen::setMessageRect(QRect rect, int alignment)
 {
     m_rect = rect;
     m_alignment = alignment;
 }
 
+/*!
+    Indicates text \a message on splash screen.
+    \param alignment Message text alignment.
+    \param color Message text color.
+    \sa setMessageRect(), finish()
+*/
 void SplashScreen::showMessage(const QString &message, int alignment, const QColor &color)
 {
     m_message = message;

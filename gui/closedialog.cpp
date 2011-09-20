@@ -47,9 +47,9 @@ namespace {
 
 /*!
     \class CloseDialog
-    \brief Диалог подтверждения закрытия приложения.
+    \brief Dialog with confirmation of closing.
 
-    Пример использования (в случае вызова из окна, которое после вызова станет модальным):
+    Example 1: modal dialog, i.e. synchronious invoke
     \code
     bool isAlwaysAskChecked;
     if (CloseDialog::askUser(this, m_appName, m_appName, &isAlwaysAskChecked)) {
@@ -59,7 +59,7 @@ namespace {
     }
     \endcode
 
-    Пример использования (в случае вызова из трея):
+    Example 2: non-modal dialog,  i.t. asynchronious invoke (e.g. when invoking from tray)
     \code
     if (!m_isAskBeforeQuit) {
         qApp->quit();
@@ -93,6 +93,9 @@ namespace {
 
 /* public */
 
+/*!
+    Constructs dialog with parent \a parent.
+*/
 CloseDialog::CloseDialog(QWidget *parent)
     : QDialog(parent), ui(new Ui::CloseDialog)
 {
@@ -109,13 +112,16 @@ CloseDialog::CloseDialog(QWidget *parent)
                      this, SLOT(reject()));
 }
 
+/*!
+    Destructor.
+*/
 CloseDialog::~CloseDialog()
 {
     delete ui;
 }
 
 /*!
-    Устанавливает имя приложения
+    Sets up name of application to \a name.
 */
 void CloseDialog::setAppName(const QString &name)
 {
@@ -124,7 +130,7 @@ void CloseDialog::setAppName(const QString &name)
 }
 
 /*!
-    Устанавливает состояние чек-бокса "Проверять всегда".
+    Sets up state of check box "Always perform ..." to \a isChecked.
 */
 void CloseDialog::setAlwaysAskChecked(bool isChecked)
 {
@@ -132,7 +138,7 @@ void CloseDialog::setAlwaysAskChecked(bool isChecked)
 }
 
 /*!
-    Возвращает состояние чек-бокса "Проверять всегда".
+    Returns state of check box "Always perform ...".
 */
 bool CloseDialog::isAlwaysAskChecked() const
 {
@@ -140,12 +146,12 @@ bool CloseDialog::isAlwaysAskChecked() const
 }
 
 /*!
-    Показывает диалог завершения приложения и возвращает ответ пользователя на вопрос о закрытии.
-    \return true Если пользователь подтвердил завершение приложения.
-    \param title Заголовок окна диалога.
-    \param appName Имя закрываемого приложения.
-    \param isAlwaysAskChecked Если передан адрес переменной - она будет содержать состояние
-           чек-бокса "Проверять всегда".
+    Shows close dialog and returns user action.
+    \return true In case when user confirmed closing.
+    \param title Dialog window title.
+    \param appName Application name.
+    \param isAlwaysAskChecked If given variable address - it will contain state of check box
+           "Always perform...".
 */
 bool CloseDialog::askUser(QWidget *parent, const QString &title, const QString &appName,
                           bool *isAlwaysAskChecked)
@@ -177,7 +183,7 @@ void CloseDialog::changeEvent(QEvent *e)
 /* private */
 
 /*!
-    Устанавливает иконку диалога.
+    Sets up dialog icon.
 */
 void CloseDialog::setupDialogIcon()
 {
@@ -190,7 +196,7 @@ void CloseDialog::setupDialogIcon()
 }
 
 /*!
-    Подстраивает геометрические размеры окна под измененные размеры виджетов.
+    Adjust window geometric sizes for changed widget sizes.
 */
 void CloseDialog::adjust()
 {
