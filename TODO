@@ -1,3 +1,5 @@
+- Add GNU files (AUTHORS, README, INSTALL, ChangeLog etc)
+- Make all pathes like #include "qaux/gui/..."
 - Translate all russian to english
 - List of recomendations (like to include qt_ru.qm etc)
 - Close dialog: make something with white ribbon - it's ugly
