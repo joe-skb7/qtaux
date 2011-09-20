@@ -1,0 +1,16 @@
+/*
+    This file needed only for win32.
+*/
+
+#questionPanelWidget {
+    background-color: #ffffff;
+}
+
+#separatorWidget {
+    background-color: #dfdfdf;
+}
+
+#questionLabel {
+    font-size: 14px;
+    color: #0033bb;
+}
