@@ -1,5 +1,8 @@
 Common rules
 ------------
 
-- All the comments and documentaion must be in english.
-- For all classes and functions must be available doxy-comments.
+- All the comments and documentaion must be in english
+- For all classes and functions must be available doxy-comments
+- Headers must be able to include by "qaux/gui/..." etc
+- No namespaces
+- All files must contain BSD-header

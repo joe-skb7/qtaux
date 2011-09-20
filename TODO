@@ -1,6 +1,21 @@
+Common
+------
+
 - Add GNU files (AUTHORS, README, INSTALL, ChangeLog etc)
 - List of recomendations (like to include qt_ru.qm etc)
 - In README make link to qtsolutions and to scratches
-- Make .ts files and build qm in pro-files
 - Make it possible to build static/dynamic library
   (separately for gui and sys)
+- Think about some prefix for classes instead of namespaces.
+
+
+Gui
+---
+
+- Make .ts files and build qm in pro-files
+
+
+Sys
+---
+
+- Test all classes for all platforms
