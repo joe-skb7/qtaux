@@ -34,52 +34,33 @@
 **
 ****************************************************************************/
 
-#include <QtCore/QLocale>
-#include <QtCore/QProcess>
-#include <QtCore/QRegExp>
-#include "qaux/sys/lagmeter_unix.h"
+#ifndef QXLAGMETER_H
+#define QXLAGMETER_H
 
-LagMeter::LagMeter(QObject *parent)
-    : QObject(parent), m_result(false)
+#include <QtCore/QObject>
+#include "qxsys/qxlagmeterbase.h"
+
+class QProcess;
+
+class QxLagMeter : public QObject, public QxLagMeterBase
 {
-    m_ping = new QProcess;
-    QObject::connect(m_ping, SIGNAL(readyReadStandardOutput()),
-                     this, SLOT(processOutput()));
-    QObject::connect(m_ping, SIGNAL(finished(int)),
-                     this, SLOT(processFinish()));
-}
+    Q_OBJECT
 
-void LagMeter::ping(const QString &address)
-{
-    m_result = false;
-    m_address = address;
-    m_ping->start("ping", QStringList() << "-c4" << address);
-}
+public:
+    explicit QxLagMeter(QObject *parent = 0);
 
-/* private slots */
+    void ping(const QString &address);
 
-void LagMeter::processOutput()
-{
-    QString text = m_ping->readAllStandardOutput();
-    text = text.trimmed();
+signals:
+    void lagReceived(int msec);
 
-    // Parsing
-    QRegExp rx("^.*:.*=\\s*\\d+.*=\\s*\\d+.*=\\s*([\\d\\.]+).*$");
-    rx.setMinimal(true);
-    if (rx.indexIn(text, 0) != -1) {
-        bool ok;
-        double floatLag = QLocale::c().toDouble(rx.cap(1), &ok);
-        if (!ok)
-            return;
-        int lag = qRound(floatLag);
-        m_result = true;
-        m_ping->kill();
-        emit lagReceived(lag);
-    }
-}
+private:
+    QProcess *m_ping;
+    bool m_result;
 
-void LagMeter::processFinish()
-{
-    if (!m_result)
-        emit lagReceived(-1);
-}
+private slots:
+    void processOutput();
+    void processFinish();
+};
+
+#endif // QXLAGMETER_H

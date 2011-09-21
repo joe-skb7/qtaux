@@ -34,37 +34,89 @@
 **
 ****************************************************************************/
 
-#ifndef CLOSEDIALOG_H
-#define CLOSEDIALOG_H
+#include "qxsys/qxlagmeterbase.h"
 
-#include <QtGui/QDialog>
+/*!
+    \class QxLagMeter
+    \brief Estimates "lag" - time for ping some IP or HTTP address.
+    Since that class uses invoke of "ping" utility there is no root privileges required
+    for ICMP.
+    (see "man 2 chmod | grep SUID" command output for details).
 
-namespace Ui {
-    class CloseDialog;
+    Simple example:
+    \code
+    void Test::exec()
+    {
+        QObject::connect(&m_lagMeter, SIGNAL(lagReceived(int)),
+                         this, SLOT(processLag(int)));
+        m_lagMeter.ping("8.8.8.8");
+    }
+
+    void Test::processLag(int ms)
+    {
+        qDebug() << "Lag: " << ms << " ms";
+    }
+    \endcode
+
+    Another interesting example:
+    \code
+    void A::refreshServer(int index)
+    {
+        QxLagMeter *lagMeter;
+
+        // Preserve repeated run of process
+        if (m_lagMeterMap.contains(index)) {
+            lagMeter = m_lagMeterMap[index];
+            delete lagMeter;
+        }
+
+        lagMeter = new QxLagMeter;
+        QObject::connect(lagMeter, SIGNAL(lagReceived(int)),
+                         this, SLOT(processLag(int)));
+        lagMeter->setId(index);
+        m_lagMeterMap[index] = lagMeter;
+        lagMeter->ping(someServerIpAddress);
+    }
+
+    void A::processLag(int msec)
+    {
+        QxLagMeter *lagMeter = static_cast<QxLagMeter*>(sender());
+        int index = lagMeter->id();
+        someServer.pingTime = msec;
+    }
+    \endcode
+*/
+
+/*!
+    \class QxLagMeterBase
+    \todo Write description...
+*/
+
+QxLagMeterBase::QxLagMeterBase()
+    : m_id(-1)
+{
 }
 
-class CloseDialog : public QDialog
+/*!
+    Sets up current lagmeter id.
+*/
+void QxLagMeterBase::setId(int id)
 {
-    Q_OBJECT
+    m_id = id;
+}
 
-public:
-    explicit CloseDialog(QWidget *parent = 0);
-    ~CloseDialog();
+/*!
+    Returns current lagmeter id.
+*/
+int QxLagMeterBase::id() const
+{
+    return m_id;
+}
 
-    void setAppName(const QString &name);
-    void setAlwaysAskChecked(bool isChecked);
-    bool isAlwaysAskChecked() const;
-    static bool askUser(QWidget *parent, const QString &title, const QString &appName,
-                        bool *isAlwaysAskChecked = 0);
-
-protected:
-    void changeEvent(QEvent *e);
-
-private:
-    Ui::CloseDialog *ui;
-
-    void setupDialogIcon();
-    void adjust();
-};
-
-#endif // CLOSEDIALOG_H
+/*!
+    Returns address for ping.
+*/
+QString QxLagMeterBase::address() const
+{
+    return m_address;
+}

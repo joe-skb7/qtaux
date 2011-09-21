@@ -37,13 +37,9 @@
 #include <QtCore/QLocale>
 #include <QtCore/QProcess>
 #include <QtCore/QRegExp>
-#include "qaux/sys/lagmeter_mac.h"
+#include "qxsys/qxlagmeter.h"
 
-/*!
-    \todo Need to be tested.
-*/
-
-LagMeter::LagMeter(QObject *parent)
+QxLagMeter::QxLagMeter(QObject *parent)
     : QObject(parent), m_result(false)
 {
     m_ping = new QProcess;
@@ -53,7 +49,7 @@ LagMeter::LagMeter(QObject *parent)
                      this, SLOT(processFinish()));
 }
 
-void LagMeter::ping(const QString &address)
+void QxLagMeter::ping(const QString &address)
 {
     m_result = false;
     m_address = address;
@@ -62,7 +58,7 @@ void LagMeter::ping(const QString &address)
 
 /* private slots */
 
-void LagMeter::processOutput()
+void QxLagMeter::processOutput()
 {
     QString text = m_ping->readAllStandardOutput();
     text = text.trimmed();
@@ -82,7 +78,7 @@ void LagMeter::processOutput()
     }
 }
 
-void LagMeter::processFinish()
+void QxLagMeter::processFinish()
 {
     if (!m_result)
         emit lagReceived(-1);

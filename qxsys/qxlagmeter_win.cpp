@@ -38,9 +38,9 @@
 #include <QtCore/QProcess>
 #include <QtCore/QRegExp>
 #include <QtCore/QTextCodec>
-#include "qaux/sys/lagmeter_win.h"
+#include "qxsys/qxlagmeter.h"
 
-LagMeter::LagMeter(QObject *parent)
+QxLagMeter::QxLagMeter(QObject *parent)
     : QObject(parent), m_result(false)
 {
     m_ping = new QProcess;
@@ -50,7 +50,7 @@ LagMeter::LagMeter(QObject *parent)
                      this, SLOT(processFinish()));
 }
 
-void LagMeter::ping(const QString &address)
+void QxLagMeter::ping(const QString &address)
 {
     m_result = false;
     m_address = address;
@@ -59,7 +59,7 @@ void LagMeter::ping(const QString &address)
 
 /* private slots */
 
-void LagMeter::processOutput()
+void QxLagMeter::processOutput()
 {
     // Retrieving console output text
     QString text = QTextCodec::codecForName("cp-866")->toUnicode(m_ping->readAllStandardOutput());
@@ -91,7 +91,7 @@ void LagMeter::processOutput()
     }
 }
 
-void LagMeter::processFinish()
+void QxLagMeter::processFinish()
 {
     if (!m_result)
         emit lagReceived(-1);

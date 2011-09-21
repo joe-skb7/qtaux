@@ -35,10 +35,10 @@
 ****************************************************************************/
 
 #include <QtGui/QProxyStyle>
-#include "ui_closedialog.h"
-#include "qaux/gui/closedialog.h"
+#include "ui_qxclosedialog.h"
+#include "qxgui/qxclosedialog.h"
 #ifdef Q_OS_WIN32
-#include "qaux/gui/graphicsutil.h"
+#include "qxgui/qxgraphicsutil.h"
 #endif
 
 namespace {
@@ -46,13 +46,13 @@ namespace {
 } // anonymous namespace
 
 /*!
-    \class CloseDialog
+    \class QxCloseDialog
     \brief Dialog with confirmation of closing.
 
     Example 1: modal dialog, i.e. synchronious invoke
     \code
     bool isAlwaysAskChecked;
-    if (CloseDialog::askUser(this, m_appName, m_appName, &isAlwaysAskChecked)) {
+    if (QxCloseDialog::askUser(this, m_appName, m_appName, &isAlwaysAskChecked)) {
         if (!isAlwaysAskChecked)
             emit closeDialogAlwaysAskChanged(false);
         qApp->quit();
@@ -75,7 +75,7 @@ namespace {
     }
 
     if (!m_closeDialog) {
-        m_closeDialog = new CloseDialog(this);
+        m_closeDialog = new QxCloseDialog(this);
         m_closeDialog->setAppName(m_appName);
         m_closeDialog->setWindowTitle(m_appName);
     }
@@ -96,12 +96,12 @@ namespace {
 /*!
     Constructs dialog with parent \a parent.
 */
-CloseDialog::CloseDialog(QWidget *parent)
-    : QDialog(parent), ui(new Ui::CloseDialog)
+QxCloseDialog::QxCloseDialog(QWidget *parent)
+    : QDialog(parent), ui(new Ui::QxCloseDialog)
 {
     ui->setupUi(this);
 #ifdef Q_OS_WIN32
-    GraphicsUtil::setStyleSheet(":/qss/closedialog.qss", this);
+    QxGraphicsUtil::setStyleSheet(":/qss/closedialog.qss", this);
 #endif
     setupDialogIcon();
     setFixedSize(sizeHint());
@@ -115,7 +115,7 @@ CloseDialog::CloseDialog(QWidget *parent)
 /*!
     Destructor.
 */
-CloseDialog::~CloseDialog()
+QxCloseDialog::~QxCloseDialog()
 {
     delete ui;
 }
@@ -123,7 +123,7 @@ CloseDialog::~CloseDialog()
 /*!
     Sets up name of application to \a name.
 */
-void CloseDialog::setAppName(const QString &name)
+void QxCloseDialog::setAppName(const QString &name)
 {
     ui->questionLabel->setText(tr("Do you really want to exit %1?").arg(name));
     adjust();
@@ -132,7 +132,7 @@ void CloseDialog::setAppName(const QString &name)
 /*!
     Sets up state of check box "Always perform ..." to \a isChecked.
 */
-void CloseDialog::setAlwaysAskChecked(bool isChecked)
+void QxCloseDialog::setAlwaysAskChecked(bool isChecked)
 {
     ui->alwaysAskCheckBox->setChecked(isChecked);
 }
@@ -140,7 +140,7 @@ void CloseDialog::setAlwaysAskChecked(bool isChecked)
 /*!
     Returns state of check box "Always perform ...".
 */
-bool CloseDialog::isAlwaysAskChecked() const
+bool QxCloseDialog::isAlwaysAskChecked() const
 {
     return ui->alwaysAskCheckBox->isChecked();
 }
@@ -153,10 +153,10 @@ bool CloseDialog::isAlwaysAskChecked() const
     \param isAlwaysAskChecked If given variable address - it will contain state of check box
            "Always perform...".
 */
-bool CloseDialog::askUser(QWidget *parent, const QString &title, const QString &appName,
+bool QxCloseDialog::askUser(QWidget *parent, const QString &title, const QString &appName,
                           bool *isAlwaysAskChecked)
 {
-    CloseDialog dialog(parent);
+    QxCloseDialog dialog(parent);
     dialog.setWindowTitle(title);
     dialog.setAppName(appName);
     dialog.adjust();
@@ -168,7 +168,7 @@ bool CloseDialog::askUser(QWidget *parent, const QString &title, const QString &
 
 /* protected */
 
-void CloseDialog::changeEvent(QEvent *e)
+void QxCloseDialog::changeEvent(QEvent *e)
 {
     QDialog::changeEvent(e);
     switch (e->type()) {
@@ -185,7 +185,7 @@ void CloseDialog::changeEvent(QEvent *e)
 /*!
     Sets up dialog icon.
 */
-void CloseDialog::setupDialogIcon()
+void QxCloseDialog::setupDialogIcon()
 {
     ui->iconLabel->setText("");
     QIcon questionIcon = qApp->style()->standardIcon(QStyle::SP_MessageBoxQuestion);
@@ -198,7 +198,7 @@ void CloseDialog::setupDialogIcon()
 /*!
     Adjust window geometric sizes for changed widget sizes.
 */
-void CloseDialog::adjust()
+void QxCloseDialog::adjust()
 {
     ui->iconLabel->adjustSize();
     ui->questionLabel->adjustSize();

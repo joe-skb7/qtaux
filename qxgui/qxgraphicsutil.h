@@ -34,37 +34,19 @@
 **
 ****************************************************************************/
 
-#ifndef LAGMETERBASE_H
-#define LAGMETERBASE_H
+#ifndef QXGRAPHICSUTIL_H
+#define QXGRAPHICSUTIL_H
 
-#include <QtCore/QString>
+class QString;
+class QWidget;
+class QApplication;
 
-class LagMeterBase
+class QxGraphicsUtil
 {
 public:
-    LagMeterBase();
-
-    /*!
-        Ping address \a address.
-        \sa lagReceived()
-    */
-    virtual void ping(const QString &address) = 0;
-    virtual void setId(int id);
-    virtual int id() const;
-    virtual QString address() const;
-
-public: // signals
-    /*!
-        Returns "lag" - time for a ping.
-        \param msec Lag time, msec; in case when ping unable - will be equal to -1.
-    */
-    virtual void lagReceived(int msec) = 0;
-
-protected:
-    QString m_address;
-
-private:
-    int m_id;
+    static bool setStyleSheet(const QString &fileName, QWidget *widget);
+    static bool setStyleSheet(const QString &fileName, QApplication *app);
+    static void moveWindowToCenter(QWidget *widget);
 };
 
-#endif // LAGMETERBASE_H
+#endif // QXGRAPHICSUTIL_H

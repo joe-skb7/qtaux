@@ -34,36 +34,58 @@
 **
 ****************************************************************************/
 
-#ifndef SPLASHSCREEN_H
-#define SPLASHSCREEN_H
+#include <QtCore/QDebug>
+#include <QtCore/QFile>
+#include <QtGui/QApplication>
+#include <QtGui/QDesktopWidget>
+#include <QtGui/QWidget>
+#include "qxgui/qxgraphicsutil.h"
 
-#include <QtGui/QFrame>
+/*!
+    \class QxGraphicsUtil
+    \brief Contains functions for graphical isues.
+*/
 
-class QLabel;
-
-class SplashScreen : public QFrame
+/*!
+    Sets up qss style for widget \a widget from file \a fileName.
+*/
+bool QxGraphicsUtil::setStyleSheet(const QString &fileName, QWidget *widget)
 {
-    Q_OBJECT
+    QFile file(fileName);
+    if (file.open(QFile::ReadOnly)) {
+        widget->setStyleSheet(QString::fromUtf8(file.readAll()));
+    } else {
+        qWarning() << __FILE__ << "," << __FUNCTION__ << "():" << "qss file \"" + fileName
+                   + "\" not found!";
+        return false;
+    }
+    return true;
+}
 
-public:
-    SplashScreen(const QPixmap &pixmap);
+/*!
+    Sets up qss style for application \a app from file \a fileName .
+*/
+bool QxGraphicsUtil::setStyleSheet(const QString &fileName, QApplication *app)
+{
+    QFile file(fileName);
+    if (file.open(QFile::ReadOnly)) {
+        app->setStyleSheet(QString::fromUtf8(file.readAll()));
+    } else {
+        qWarning() << __FILE__ << "," << __FUNCTION__ << "():" << "qss file \"" + fileName
+                   + "\" not found!";
+        return false;
+    }
+    return true;
+}
 
-    void clearMessage();
-    void setMessageRect(QRect rect, int alignment = Qt::AlignLeft);
-    void showMessage(const QString &message, int alignment = Qt::AlignLeft,
-                     const QColor &color = Qt::black);
-    void finish(QWidget *win);
-
-protected:
-    void mousePressEvent(QMouseEvent *);
-    void paintEvent(QPaintEvent *);
-
-private:
-    QRect m_rect;
-    QPixmap m_pixmap;
-    QString m_message;
-    int m_alignment;
-    QColor m_color;
-};
-
-#endif // SPLASHSCREEN_H
+/*!
+    Places window \a widget onto the screen center.
+    \note Usage of this function recommended only for Windows, since the DE in other OS's
+    able to arrange windows, so forced setting of window position is wrong behavior.
+*/
+void QxGraphicsUtil::moveWindowToCenter(QWidget *widget)
+{
+    QRect rect = widget->frameGeometry();
+    rect.moveCenter(QDesktopWidget().availableGeometry().center());
+    widget->move(rect.topLeft());
+}

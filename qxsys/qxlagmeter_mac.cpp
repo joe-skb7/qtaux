@@ -34,89 +34,56 @@
 **
 ****************************************************************************/
 
-#include "qaux/sys/lagmeterbase.h"
+#include <QtCore/QLocale>
+#include <QtCore/QProcess>
+#include <QtCore/QRegExp>
+#include "qxsys/qxlagmeter.h"
 
 /*!
-    \class LagMeter
-    \brief Estimates "lag" - time for ping some IP or HTTP address.
-    Since that class uses invoke of "ping" utility there is no root privileges required
-    for ICMP.
-    (see "man 2 chmod | grep SUID" command output for details).
-
-    Simple example:
-    \code
-    void Test::exec()
-    {
-        QObject::connect(&m_lagMeter, SIGNAL(lagReceived(int)),
-                         this, SLOT(processLag(int)));
-        m_lagMeter.ping("8.8.8.8");
-    }
-
-    void Test::processLag(int ms)
-    {
-        qDebug() << "Lag: " << ms << " ms";
-    }
-    \endcode
-
-    Another interesting example:
-    \code
-    void A::refreshServer(int index)
-    {
-        LagMeter *lagMeter;
-
-        // Preserve repeated run of process
-        if (m_lagMeterMap.contains(index)) {
-            lagMeter = m_lagMeterMap[index];
-            delete lagMeter;
-        }
-
-        lagMeter = new LagMeter;
-        QObject::connect(lagMeter, SIGNAL(lagReceived(int)),
-                         this, SLOT(processLag(int)));
-        lagMeter->setId(index);
-        m_lagMeterMap[index] = lagMeter;
-        lagMeter->ping(someServerIpAddress);
-    }
-
-    void A::processLag(int msec)
-    {
-        LagMeter *lagMeter = static_cast<LagMeter*>(sender());
-        int index = lagMeter->id();
-        someServer.pingTime = msec;
-    }
-    \endcode
+    \todo Need to be tested.
 */
 
-/*!
-    \class LagMeterBase
-    \todo Write description...
-*/
-
-LagMeterBase::LagMeterBase()
-    : m_id(-1)
+QxLagMeter::QxLagMeter(QObject *parent)
+    : QObject(parent), m_result(false)
 {
+    m_ping = new QProcess;
+    QObject::connect(m_ping, SIGNAL(readyReadStandardOutput()),
+                     this, SLOT(processOutput()));
+    QObject::connect(m_ping, SIGNAL(finished(int)),
+                     this, SLOT(processFinish()));
 }
 
-/*!
-    Sets up current lagmeter id.
-*/
-void LagMeterBase::setId(int id)
+void QxLagMeter::ping(const QString &address)
 {
-    m_id = id;
+    m_result = false;
+    m_address = address;
+    m_ping->start("ping", QStringList() << "-c4" << address);
 }
 
-/*!
-    Returns current lagmeter id.
-*/
-int LagMeterBase::id() const
+/* private slots */
+
+void QxLagMeter::processOutput()
 {
-    return m_id;
+    QString text = m_ping->readAllStandardOutput();
+    text = text.trimmed();
+
+    // Parsing
+    QRegExp rx("^.*:.*=\\s*\\d+.*=\\s*\\d+.*=\\s*([\\d\\.]+).*$");
+    rx.setMinimal(true);
+    if (rx.indexIn(text, 0) != -1) {
+        bool ok;
+        double floatLag = QLocale::c().toDouble(rx.cap(1), &ok);
+        if (!ok)
+            return;
+        int lag = qRound(floatLag);
+        m_result = true;
+        m_ping->kill();
+        emit lagReceived(lag);
+    }
 }
 
-/*!
-    Returns address for ping.
-*/
-QString LagMeterBase::address() const
+void QxLagMeter::processFinish()
 {
-    return m_address;
+    if (!m_result)
+        emit lagReceived(-1);
 }

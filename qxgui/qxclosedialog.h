@@ -34,33 +34,37 @@
 **
 ****************************************************************************/
 
-#ifndef LAGMETER_H
-#define LAGMETER_H
+#ifndef QXCLOSEDIALOG_H
+#define QXCLOSEDIALOG_H
 
-#include <QtCore/QObject>
-#include "qaux/sys/lagmeterbase.h"
+#include <QtGui/QDialog>
 
-class QProcess;
+namespace Ui {
+    class QxCloseDialog;
+}
 
-class LagMeter : public QObject, public LagMeterBase
+class QxCloseDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit LagMeter(QObject *parent = 0);
+    explicit QxCloseDialog(QWidget *parent = 0);
+    ~QxCloseDialog();
 
-    void ping(const QString &address);
+    void setAppName(const QString &name);
+    void setAlwaysAskChecked(bool isChecked);
+    bool isAlwaysAskChecked() const;
+    static bool askUser(QWidget *parent, const QString &title, const QString &appName,
+                        bool *isAlwaysAskChecked = 0);
 
-signals:
-    void lagReceived(int msec);
+protected:
+    void changeEvent(QEvent *e);
 
 private:
-    QProcess *m_ping;
-    bool m_result;
+    Ui::QxCloseDialog *ui;
 
-private slots:
-    void processOutput();
-    void processFinish();
+    void setupDialogIcon();
+    void adjust();
 };
 
-#endif // LAGMETER_H
+#endif // QXCLOSEDIALOG_H
