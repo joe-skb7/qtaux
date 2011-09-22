@@ -6,3 +6,5 @@ Common rules
 - Headers must be able to include by "qxgui/..." etc
 - No namespaces
 - All files must contain BSD-header
+- No eXecutable bit
+- UNIX new-string symbol (LF, no CRLF)
