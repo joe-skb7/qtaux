@@ -1,7 +1,7 @@
 QT *= core
 
-INCLUDEPATH += $$PWD
-DEPENDPATH += $$PWD
+INCLUDEPATH *= $$PWD
+DEPENDPATH *= $$PWD
 
 HEADERS += \
     $$PWD/qxsys/qxlagmeter.h \
