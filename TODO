@@ -9,6 +9,7 @@ Common
 - Think about some prefix for classes instead of namespaces
 - Add doxyfile
 - Add qxcore (e.g. Logger)
+- Add qxutil (e.g. common)
 
 
 Gui
