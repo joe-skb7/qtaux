@@ -38,10 +38,6 @@
 #include <QtCore/QSysInfo>
 #include "qxsys/qxosprober.h"
 
-QxOsProber::QxOsProber()
-{
-}
-
 QString QxOsProber::osName()
 {
     QProcess process;

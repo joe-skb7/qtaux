@@ -47,7 +47,7 @@
 class QxOsProber
 {
 public:
-    QxOsProber();
+    QxOsProber() {}
 
     /*!
         Returns string representation of OS version.
