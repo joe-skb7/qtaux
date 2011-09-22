@@ -58,7 +58,7 @@
     }
     \endcode
 
-    Another interesting example:
+    Another interesting example (illustrates \a id property using):
     \code
     void A::refreshServer(int index)
     {
@@ -89,7 +89,7 @@
 
 /*!
     \class QxLagMeterBase
-    \todo Write description...
+    \brief Base class for QxLagMeter; contains common declarations.
 */
 
 QxLagMeterBase::QxLagMeterBase()
