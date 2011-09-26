@@ -37,57 +37,6 @@
 #include "qxsys/qxlagmeterbase.h"
 
 /*!
-    \class QxLagMeter
-    \brief Estimates "lag" - time for ping some IP or HTTP address.
-    Since that class uses invoke of "ping" utility there is no root privileges required
-    for ICMP.
-    (see "man 2 chmod | grep SUID" command output for details).
-
-    Simple example:
-    \code
-    void Test::exec()
-    {
-        QObject::connect(&m_lagMeter, SIGNAL(lagReceived(int)),
-                         this, SLOT(processLag(int)));
-        m_lagMeter.ping("8.8.8.8");
-    }
-
-    void Test::processLag(int ms)
-    {
-        qDebug() << "Lag: " << ms << " ms";
-    }
-    \endcode
-
-    Another interesting example (illustrates \a id property using):
-    \code
-    void A::refreshServer(int index)
-    {
-        QxLagMeter *lagMeter;
-
-        // Preserve repeated run of process
-        if (m_lagMeterMap.contains(index)) {
-            lagMeter = m_lagMeterMap[index];
-            delete lagMeter;
-        }
-
-        lagMeter = new QxLagMeter;
-        QObject::connect(lagMeter, SIGNAL(lagReceived(int)),
-                         this, SLOT(processLag(int)));
-        lagMeter->setId(index);
-        m_lagMeterMap[index] = lagMeter;
-        lagMeter->ping(someServerIpAddress);
-    }
-
-    void A::processLag(int msec)
-    {
-        QxLagMeter *lagMeter = static_cast<QxLagMeter*>(sender());
-        int index = lagMeter->id();
-        someServer.pingTime = msec;
-    }
-    \endcode
-*/
-
-/*!
     \class QxLagMeterBase
     \brief Base class for QxLagMeter; contains common declarations.
 */
