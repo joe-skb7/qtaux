@@ -34,11 +34,13 @@ mac {
 }
 win32 {
     HEADERS += \
+        $$PWD/qxsys/qxstartupprovider.h \
         $$PWD/qxsys/qxwindowsfirewallsettings.h
     SOURCES += \
         $$PWD/qxsys/qxlagmeter_win.cpp \
         $$PWD/qxsys/qxosprober_win.cpp \
         $$PWD/qxsys/qxpathprober_win.cpp \
         $$PWD/qxsys/qxprocessprober_win.cpp \
+        $$PWD/qxsys/qxstartupprovider_win.cpp \
         $$PWD/qxsys/qxwindowsfirewallsettings.cpp
 }
