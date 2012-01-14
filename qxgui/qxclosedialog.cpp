@@ -16,10 +16,10 @@
 **      the documentation and/or other materials provided with the
 **      distribution.
 **
-** THIS SOFTWARE IS PROVIDED BY <COPYRIGHT HOLDER> ''AS IS'' AND ANY
+** THIS SOFTWARE IS PROVIDED BY SAM PROTSENKO ''AS IS'' AND ANY
 ** EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 ** IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-** PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> OR
+** PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAM PROTSENKO OR
 ** CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 ** EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
 ** PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
@@ -35,10 +35,10 @@
 ****************************************************************************/
 
 #include <QtGui/QProxyStyle>
-#include "ui_closedialog.h"
-#include "gui/closedialog.h"
+#include "ui_qxclosedialog.h"
+#include "qxgui/qxclosedialog.h"
 #ifdef Q_OS_WIN32
-#include "gui/graphicsutil.h"
+#include "qxgui/qxgraphicsutil.h"
 #endif
 
 namespace {
@@ -46,20 +46,20 @@ namespace {
 } // anonymous namespace
 
 /*!
-    \class CloseDialog
-    \brief Диалог подтверждения закрытия приложения.
+    \class QxCloseDialog
+    \brief Dialog with confirmation of closing.
 
-    Пример использования (в случае вызова из окна, которое после вызова станет модальным):
+    Example 1: modal dialog, i.e. synchronious invoke
     \code
     bool isAlwaysAskChecked;
-    if (CloseDialog::askUser(this, m_appName, m_appName, &isAlwaysAskChecked)) {
+    if (QxCloseDialog::askUser(this, m_appName, m_appName, &isAlwaysAskChecked)) {
         if (!isAlwaysAskChecked)
             emit closeDialogAlwaysAskChanged(false);
         qApp->quit();
     }
     \endcode
 
-    Пример использования (в случае вызова из трея):
+    Example 2: non-modal dialog,  i.t. asynchronious invoke (e.g. when invoking from tray)
     \code
     if (!m_isAskBeforeQuit) {
         qApp->quit();
@@ -75,7 +75,7 @@ namespace {
     }
 
     if (!m_closeDialog) {
-        m_closeDialog = new CloseDialog(this);
+        m_closeDialog = new QxCloseDialog(this);
         m_closeDialog->setAppName(m_appName);
         m_closeDialog->setWindowTitle(m_appName);
     }
@@ -93,12 +93,15 @@ namespace {
 
 /* public */
 
-CloseDialog::CloseDialog(QWidget *parent)
-    : QDialog(parent), ui(new Ui::CloseDialog)
+/*!
+    Constructs dialog with parent \a parent.
+*/
+QxCloseDialog::QxCloseDialog(QWidget *parent)
+    : QDialog(parent), ui(new Ui::QxCloseDialog)
 {
     ui->setupUi(this);
 #ifdef Q_OS_WIN32
-    GraphicsUtil::setStyleSheet(":/qss/closedialog.qss", this);
+    QxGraphicsUtil::setStyleSheet(":/qss/closedialog.qss", this);
 #endif
     setupDialogIcon();
     setFixedSize(sizeHint());
@@ -109,48 +112,51 @@ CloseDialog::CloseDialog(QWidget *parent)
                      this, SLOT(reject()));
 }
 
-CloseDialog::~CloseDialog()
+/*!
+    Destructor.
+*/
+QxCloseDialog::~QxCloseDialog()
 {
     delete ui;
 }
 
 /*!
-    Устанавливает имя приложения
+    Sets up name of application to \a name.
 */
-void CloseDialog::setAppName(const QString &name)
+void QxCloseDialog::setAppName(const QString &name)
 {
     ui->questionLabel->setText(tr("Do you really want to exit %1?").arg(name));
     adjust();
 }
 
 /*!
-    Устанавливает состояние чек-бокса "Проверять всегда".
+    Sets up state of check box "Always perform ..." to \a isChecked.
 */
-void CloseDialog::setAlwaysAskChecked(bool isChecked)
+void QxCloseDialog::setAlwaysAskChecked(bool isChecked)
 {
     ui->alwaysAskCheckBox->setChecked(isChecked);
 }
 
 /*!
-    Возвращает состояние чек-бокса "Проверять всегда".
+    Returns state of check box "Always perform ...".
 */
-bool CloseDialog::isAlwaysAskChecked() const
+bool QxCloseDialog::isAlwaysAskChecked() const
 {
     return ui->alwaysAskCheckBox->isChecked();
 }
 
 /*!
-    Показывает диалог завершения приложения и возвращает ответ пользователя на вопрос о закрытии.
-    \return true Если пользователь подтвердил завершение приложения.
-    \param title Заголовок окна диалога.
-    \param appName Имя закрываемого приложения.
-    \param isAlwaysAskChecked Если передан адрес переменной - она будет содержать состояние
-           чек-бокса "Проверять всегда".
+    Shows close dialog and returns user action.
+    \return true In case when user confirmed closing.
+    \param title Dialog window title.
+    \param appName Application name.
+    \param isAlwaysAskChecked If given variable address - it will contain state of check box
+           "Always perform...".
 */
-bool CloseDialog::askUser(QWidget *parent, const QString &title, const QString &appName,
+bool QxCloseDialog::askUser(QWidget *parent, const QString &title, const QString &appName,
                           bool *isAlwaysAskChecked)
 {
-    CloseDialog dialog(parent);
+    QxCloseDialog dialog(parent);
     dialog.setWindowTitle(title);
     dialog.setAppName(appName);
     dialog.adjust();
@@ -162,7 +168,7 @@ bool CloseDialog::askUser(QWidget *parent, const QString &title, const QString &
 
 /* protected */
 
-void CloseDialog::changeEvent(QEvent *e)
+void QxCloseDialog::changeEvent(QEvent *e)
 {
     QDialog::changeEvent(e);
     switch (e->type()) {
@@ -177,9 +183,9 @@ void CloseDialog::changeEvent(QEvent *e)
 /* private */
 
 /*!
-    Устанавливает иконку диалога.
+    Sets up dialog icon.
 */
-void CloseDialog::setupDialogIcon()
+void QxCloseDialog::setupDialogIcon()
 {
     ui->iconLabel->setText("");
     QIcon questionIcon = qApp->style()->standardIcon(QStyle::SP_MessageBoxQuestion);
@@ -190,9 +196,9 @@ void CloseDialog::setupDialogIcon()
 }
 
 /*!
-    Подстраивает геометрические размеры окна под измененные размеры виджетов.
+    Adjust window geometric sizes for changed widget sizes.
 */
-void CloseDialog::adjust()
+void QxCloseDialog::adjust()
 {
     ui->iconLabel->adjustSize();
     ui->questionLabel->adjustSize();

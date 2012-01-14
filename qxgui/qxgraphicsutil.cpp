@@ -16,10 +16,10 @@
 **      the documentation and/or other materials provided with the
 **      distribution.
 **
-** THIS SOFTWARE IS PROVIDED BY <COPYRIGHT HOLDER> ''AS IS'' AND ANY
+** THIS SOFTWARE IS PROVIDED BY SAM PROTSENKO ''AS IS'' AND ANY
 ** EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 ** IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-** PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> OR
+** PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAM PROTSENKO OR
 ** CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 ** EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
 ** PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
@@ -39,17 +39,17 @@
 #include <QtGui/QApplication>
 #include <QtGui/QDesktopWidget>
 #include <QtGui/QWidget>
-#include "gui/graphicsutil.h"
+#include "qxgui/qxgraphicsutil.h"
 
 /*!
-    \class GraphicsUtil
-    \brief Содержит функции работы с графическими элементами.
+    \class QxGraphicsUtil
+    \brief Contains functions for graphical isues.
 */
 
 /*!
-    Устанавливает qss-стиль из файла \a fileName для виджета \a widget.
+    Sets up qss style for widget \a widget from file \a fileName.
 */
-bool GraphicsUtil::setStyleSheet(const QString &fileName, QWidget *widget)
+bool QxGraphicsUtil::setStyleSheet(const QString &fileName, QWidget *widget)
 {
     QFile file(fileName);
     if (file.open(QFile::ReadOnly)) {
@@ -63,9 +63,9 @@ bool GraphicsUtil::setStyleSheet(const QString &fileName, QWidget *widget)
 }
 
 /*!
-    Устанавливает qss-стиль из файла \a fileName для приложения \a app.
+    Sets up qss style for application \a app from file \a fileName .
 */
-bool GraphicsUtil::setStyleSheet(const QString &fileName, QApplication *app)
+bool QxGraphicsUtil::setStyleSheet(const QString &fileName, QApplication *app)
 {
     QFile file(fileName);
     if (file.open(QFile::ReadOnly)) {
@@ -79,13 +79,11 @@ bool GraphicsUtil::setStyleSheet(const QString &fileName, QApplication *app)
 }
 
 /*!
-    Расположить окно по центру экрана.
-    \note Использование этой функции рекомендуется только на Windows, т.к. в остальных ОС
-    оконный менеджер сам знает, как лучше расположить окна и принудительная установка позиции
-    окна является нежелательным поведением.
-    \note http://www.wiki.crossplatform.ru/index.php/Как_расположить_окно_по_центру_экрана%3F
+    Places window \a widget onto the screen center.
+    \note Usage of this function recommended only for Windows, since the DE in other OS's
+    able to arrange windows, so forced setting of window position is wrong behavior.
 */
-void GraphicsUtil::moveWindowToCenter(QWidget *widget)
+void QxGraphicsUtil::moveWindowToCenter(QWidget *widget)
 {
     QRect rect = widget->frameGeometry();
     rect.moveCenter(QDesktopWidget().availableGeometry().center());

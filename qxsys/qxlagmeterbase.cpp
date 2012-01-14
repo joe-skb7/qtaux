@@ -16,10 +16,10 @@
 **      the documentation and/or other materials provided with the
 **      distribution.
 **
-** THIS SOFTWARE IS PROVIDED BY <COPYRIGHT HOLDER> ''AS IS'' AND ANY
+** THIS SOFTWARE IS PROVIDED BY SAM PROTSENKO ''AS IS'' AND ANY
 ** EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 ** IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-** PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> OR
+** PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAM PROTSENKO OR
 ** CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 ** EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
 ** PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
@@ -34,19 +34,38 @@
 **
 ****************************************************************************/
 
-#ifndef GRAPHICSUTIL_H
-#define GRAPHICSUTIL_H
+#include "qxsys/qxlagmeterbase.h"
 
-class QString;
-class QWidget;
-class QApplication;
+/*!
+    \class QxLagMeterBase
+    \brief Base class for QxLagMeter; contains common declarations.
+*/
 
-class GraphicsUtil
+QxLagMeterBase::QxLagMeterBase()
+    : m_id(-1)
 {
-public:
-    static bool setStyleSheet(const QString &fileName, QWidget *widget);
-    static bool setStyleSheet(const QString &fileName, QApplication *app);
-    static void moveWindowToCenter(QWidget *widget);
-};
+}
 
-#endif // GRAPHICSUTIL_H
+/*!
+    Sets up current lagmeter id.
+*/
+void QxLagMeterBase::setId(int id)
+{
+    m_id = id;
+}
+
+/*!
+    Returns current lagmeter id.
+*/
+int QxLagMeterBase::id() const
+{
+    return m_id;
+}
+
+/*!
+    Returns address for ping.
+*/
+QString QxLagMeterBase::address() const
+{
+    return m_address;
+}

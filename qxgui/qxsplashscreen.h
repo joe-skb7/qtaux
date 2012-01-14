@@ -16,10 +16,10 @@
 **      the documentation and/or other materials provided with the
 **      distribution.
 **
-** THIS SOFTWARE IS PROVIDED BY <COPYRIGHT HOLDER> ''AS IS'' AND ANY
+** THIS SOFTWARE IS PROVIDED BY SAM PROTSENKO ''AS IS'' AND ANY
 ** EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 ** IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-** PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> OR
+** PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAM PROTSENKO OR
 ** CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 ** EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
 ** PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
@@ -34,37 +34,36 @@
 **
 ****************************************************************************/
 
-#ifndef CLOSEDIALOG_H
-#define CLOSEDIALOG_H
+#ifndef QXSPLASHSCREEN_H
+#define QXSPLASHSCREEN_H
 
-#include <QtGui/QDialog>
+#include <QtGui/QFrame>
 
-namespace Ui {
-    class CloseDialog;
-}
+class QLabel;
 
-class CloseDialog : public QDialog
+class QxSplashScreen : public QFrame
 {
     Q_OBJECT
 
 public:
-    explicit CloseDialog(QWidget *parent = 0);
-    ~CloseDialog();
+    QxSplashScreen(const QPixmap &pixmap);
 
-    void setAppName(const QString &name);
-    void setAlwaysAskChecked(bool isChecked);
-    bool isAlwaysAskChecked() const;
-    static bool askUser(QWidget *parent, const QString &title, const QString &appName,
-                        bool *isAlwaysAskChecked = 0);
+    void clearMessage();
+    void setMessageRect(QRect rect, int alignment = Qt::AlignLeft);
+    void showMessage(const QString &message, int alignment = Qt::AlignLeft,
+                     const QColor &color = Qt::black);
+    void finish(QWidget *win);
 
 protected:
-    void changeEvent(QEvent *e);
+    void mousePressEvent(QMouseEvent *);
+    void paintEvent(QPaintEvent *);
 
 private:
-    Ui::CloseDialog *ui;
-
-    void setupDialogIcon();
-    void adjust();
+    QRect m_rect;
+    QPixmap m_pixmap;
+    QString m_message;
+    int m_alignment;
+    QColor m_color;
 };
 
-#endif // CLOSEDIALOG_H
+#endif // QXSPLASHSCREEN_H

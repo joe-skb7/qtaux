@@ -1,10 +1,24 @@
+Common
+------
+
 - Add GNU files (AUTHORS, README, INSTALL, ChangeLog etc)
-- Make all pathes like #include "qaux/gui/..."
-- Translate all russian to english
 - List of recomendations (like to include qt_ru.qm etc)
-- Close dialog: make something with white ribbon - it's ugly
 - In README make link to qtsolutions and to scratches
-- Make .ts files and build qm in pro-files
-- Comment out all the code (doxy)
 - Make it possible to build static/dynamic library
   (separately for gui and sys)
+- Think about some prefix for classes instead of namespaces
+- Add doxyfile
+- Add qxcore (e.g. Logger)
+- Add qxutil (e.g. common)
+
+
+Gui
+---
+
+- Make .ts files and build qm in pro-files
+
+
+Sys
+---
+
+- Test all classes for all platforms

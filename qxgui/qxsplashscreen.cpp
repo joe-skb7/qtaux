@@ -16,10 +16,10 @@
 **      the documentation and/or other materials provided with the
 **      distribution.
 **
-** THIS SOFTWARE IS PROVIDED BY <COPYRIGHT HOLDER> ''AS IS'' AND ANY
+** THIS SOFTWARE IS PROVIDED BY SAM PROTSENKO ''AS IS'' AND ANY
 ** EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 ** IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-** PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> OR
+** PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAM PROTSENKO OR
 ** CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 ** EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
 ** PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
@@ -36,18 +36,18 @@
 
 #include <QtCore/QDebug>
 #include <QtGui/QPainter>
-#include "gui/splashscreen.h"
+#include "qxgui/qxsplashscreen.h"
 
 /*!
-    \class SplashScreen
-    \brief Сплеш-скрин с возможностью установки прозрачных изображений.
-    \note Это workaround бага с прозрачностью сплеш-скрина; подробней читай тут:
+    \class QxSplashScreen
+    \brief Splash screen with opacity support.
+    \note This class is workaround for issue with QSplashScreen opacity; for details see:
     http://developer.qt.nokia.com/forums/viewthread/3155 .
 
     Example:
     \code
     QPixmap splashPixmap("/usr/share/kde4/apps/kscreensaver/kscience.png");
-    SplashScreen *splash = new SplashScreen(splashPixmap);
+    QxSplashScreen *splash = new QxSplashScreen(splashPixmap);
     QFont font = splash->font();
     font.setPixelSize(10);
     splash->setFont(font);
@@ -64,7 +64,7 @@
         {
             QApplication app(argc, argv);
             QPixmap pixmap("/usr/share/kde4/apps/kscreensaver/kscience.png");
-            SplashScreen splash(pixmap);
+            QxSplashScreen splash(pixmap);
             splash.show();
             app.processEvents();
 
@@ -78,7 +78,10 @@
     \sa QSplashScreen
 */
 
-SplashScreen::SplashScreen(const QPixmap &pixmap)
+/*!
+    Constructs splash screent with image \a pixmap.
+*/
+QxSplashScreen::QxSplashScreen(const QPixmap &pixmap)
     : QFrame(0, Qt::SplashScreen | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint)
 {
     if (!pixmap.isNull()) {
@@ -92,19 +95,33 @@ SplashScreen::SplashScreen(const QPixmap &pixmap)
     setFixedSize(m_pixmap.size());
 }
 
-void SplashScreen::clearMessage()
+/*!
+    Clean message.
+*/
+void QxSplashScreen::clearMessage()
 {
     m_message.clear();
     repaint();
 }
 
-void SplashScreen::setMessageRect(QRect rect, int alignment)
+/*!
+    Sets up message rectangle sizes to \a rect.
+    \param alignment Message text alignment.
+    \sa showMessage()
+*/
+void QxSplashScreen::setMessageRect(QRect rect, int alignment)
 {
     m_rect = rect;
     m_alignment = alignment;
 }
 
-void SplashScreen::showMessage(const QString &message, int alignment, const QColor &color)
+/*!
+    Indicates text \a message on splash screen.
+    \param alignment Message text alignment.
+    \param color Message text color.
+    \sa setMessageRect(), finish()
+*/
+void QxSplashScreen::showMessage(const QString &message, int alignment, const QColor &color)
 {
     m_message = message;
     m_alignment = alignment;
@@ -116,7 +133,7 @@ void SplashScreen::showMessage(const QString &message, int alignment, const QCol
     Makes the splash screen wait until the widget \a win is displayed
     before calling close() on itself.
 */
-void SplashScreen::finish(QWidget *win)
+void QxSplashScreen::finish(QWidget *win)
 {
     if (win) {
 #if defined(Q_WS_X11)
@@ -129,12 +146,12 @@ void SplashScreen::finish(QWidget *win)
 
 /* protected */
 
-void SplashScreen::mousePressEvent(QMouseEvent *)
+void QxSplashScreen::mousePressEvent(QMouseEvent *)
 {
     hide();
 }
 
-void SplashScreen::paintEvent(QPaintEvent *)
+void QxSplashScreen::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
     painter.drawPixmap(rect(), m_pixmap);
